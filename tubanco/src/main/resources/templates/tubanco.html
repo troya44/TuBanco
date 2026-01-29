@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TuBanco</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { display: flex; height: 100vh; background-color: #f4f7f6; }
+        
+        /* Barra Lateral */
+        .sidebar { width: 250px; background-color: #2c3e50; color: white; padding: 20px; }
+        .sidebar h2 { color: #4CAF50; margin-bottom: 30px; text-align: center; }
+        .sidebar a { display: block; color: white; text-decoration: none; padding: 15px; border-radius: 5px; margin-bottom: 10px; }
+        .sidebar a:hover { background-color: #34495e; }
+        .sidebar a.active { background-color: #4CAF50; }
+
+        /* Contenido Principal */
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        
+        /* Tarjetas de Saldo */
+        .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 10px; shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid #4CAF50; }
+        .card h3 { color: #7f8c8d; font-size: 0.9em; margin-bottom: 10px; }
+        .card .amount { font-size: 1.8em; font-weight: bold; color: #2c3e50; }
+
+        /* Tabla de Movimientos */
+        .transactions { margin-top: 30px; background: white; padding: 20px; border-radius: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        .positive { color: #27ae60; font-weight: bold; }
+        .negative { color: #e74c3c; font-weight: bold; }
+
+        .btn-logout { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>TuBanco</h2>
+        <a href="#" class="active">Resumen</a>
+        <a href="#">Transferencias</a>
+        <a href="#">Mis Tarjetas</a>
+        <a href="#">Préstamos</a>
+        <a href="#">Perfil</a>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Hola, Bienvenido a TuBanco</h1>                
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn-logout">Cerrar Sesión</button>
+            </form>            
+        </header>
+
+        <div class="card">
+            <h3>SALDO DISPONIBLE</h3>
+            <div class="amount" th:text="${#numbers.formatDecimal(saldo, 1, 2) + ' €'}">0,00 €</div>
+            <p style="font-size: 0.8em; color: #7f8c8d; margin-top: 5px;">
+                Cuenta: <span th:text="${cuenta}">ES0000...</span>
+            </p>
+        </div>
+
+        <div class="dashboard-cards">
+            <div class="card">
+                <h3>SALDO DISPONIBLE</h3>
+                <div class="amount">1.250,50 €</div>
+            </div>
+            <div class="card" style="border-left-color: #3498db;">
+                <h3>AHORROS</h3>
+                <div class="amount">4.300,00 €</div>
+            </div>
+            <div class="card" style="border-left-color: #f1c40f;">
+                <h3>TARJETA DE CRÉDITO</h3>
+                <div class="amount">-120,25 €</div>
+            </div>
+        </div>
+
+        <div class="transactions">
+            <h3>Últimos Movimientos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Concepto</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>28 Ene 2026</td>
+                        <td>Nómina Enero</td>
+                        <td class="positive">+1.800,00 €</td>
+                    </tr>
+                    <tr>
+                        <td>27 Ene 2026</td>
+                        <td>Supermercado Mercadona</td>
+                        <td class="negative">-45,20 €</td>
+                    </tr>
+                    <tr>
+                        <td>25 Ene 2026</td>
+                        <td>Suscripción Netflix</td>
+                        <td class="negative">-12,99 €</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
