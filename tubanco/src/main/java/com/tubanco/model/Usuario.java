@@ -3,6 +3,7 @@ package com.tubanco.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.List;
 
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
@@ -56,6 +57,9 @@ public class Usuario {
 
     @Column(name = "limite_mensual")
     private Double limiteMensual = 1000.00; // Valor por defecto
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Tarjeta> tarjetas;
 
     // Constructor vacío requerido por JPA
     public Usuario() {
@@ -111,8 +115,6 @@ public class Usuario {
             this.saldo = 0.0;
         }
     }
-
-    
 
     // --- GETTERS Y SETTERS ---
 

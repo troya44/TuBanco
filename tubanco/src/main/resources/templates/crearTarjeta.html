@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Tarjetas - TuBanco</title>
+    <style>
+        /* Reset y Estilos Generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f4f7f6;
+            color: #1e293b;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background-color: #1e293b;
+            color: white;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar h2 {
+            color: #4CAF50;
+            margin-bottom: 40px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #334155;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        /* Contenedor Principal */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        /* Carrusel de Tarjetas */
+        .cards-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 10px 5px 25px 5px;
+            margin-bottom: 40px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+
+        .cards-container::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .cards-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .card-visual {
+            min-width: 320px;
+            height: 190px;
+            border-radius: 18px;
+            padding: 22px;
+            color: white;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            scroll-snap-align: start;
+        }
+
+        .card-visual:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Temas de Tarjetas */
+        .bg-default {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        .bg-premium {
+            background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+            border: 1px solid #94a3b8;
+        }
+
+        .bg-virtual {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+
+        .bg-prepago {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        }
+
+        /* SUSTITUCIÓN DEL CHIP POR LOGO FORMAL */
+        .bank-logo-container {
+            width: 50px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .bank-logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* Eliminamos el filtro invert para que se vean los colores reales */
+            filter: none;
+            /* Opcional: un ligero sombreado para que resalte si la tarjeta es oscura */
+            border-radius: 4px;
+        }
+
+        .card-number {
+            font-size: 1.3rem;
+            letter-spacing: 3px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .btn-ver {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid white;
+            color: white;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.6rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-ver:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Formulario y Selector Visual */
+        .form-card {
+            background: white;
+            max-width: 650px;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-card h2 {
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .tipo-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 15px 0 25px 0;
+        }
+
+        .tipo-option {
+            cursor: pointer;
+        }
+
+        .tipo-option input {
+            display: none;
+        }
+
+        .tipo-box {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tipo-box .icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .tipo-box .label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .tipo-option input:checked+.tipo-box {
+            border-color: #4CAF50;
+            background-color: #f0fdf4;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+        }
+
+        .tipo-option input:checked+.tipo-box .label {
+            color: #4CAF50;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4CAF50;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2>TuBanco</h2>
+        <a href="/tubanco">Inicio</a>
+        <a href="/tarjetas" class="active">Mis Tarjetas</a>
+        <a href="/transferencias">Transferencias</a>
+        <a href="/perfil">Perfil</a>
+    </div>
+
+    <div class="main-content">
+        <h1>Mis Tarjetas</h1>
+
+        <div class="cards-container">
+            <!-- TARJETA PRINCIPAL -->
+            <div th:if="${tarjetaPrincipal != null}" class="card-visual bg-premium">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <!-- Logo sustituye al Chip -->
+                        <div class="bank-logo-container">
+                            <img src="/images/tubanco_logo.png" alt="Logo">
+                        </div>
+                        <span
+                            style="font-weight: bold; font-size: 0.9rem; display: block; margin-top: 5px;">PRINCIPAL</span>
+                    </div>
+                    <span
+                        style="font-size: 0.6rem; background: #4CAF50; color: white; padding: 3px 8px; border-radius: 4px; font-weight: bold;">ACTIVA</span>
+                </div>
+
+                <div class="card-number"
+                    th:text="${#strings.substring(tarjetaPrincipal.numero,0,4)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,4,8)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,8,12)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,12,16)}">
+                    0000 0000 0000 0000
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <small style="display:block; opacity: 0.7; font-size: 0.6rem;">Vence</small>
+                        <span th:text="${tarjetaPrincipal.fechaCaducidad}" style="font-weight: 600;">MM/AA</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <small style="display:block; opacity: 0.7; font-size: 0.6rem;">Titular</small>
+                        <span th:text="${nombre}" style="font-weight: 600;">NOMBRE</span>
+                    </div>
+                    <div>
+                        <small style="display:block; opacity: 0.7; font-size: 0.6rem;">CVV</small>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <span th:id="'cvv-' + ${tarjetaPrincipal.id}" style="font-weight: 600;">***</span>
+                            <button class="btn-ver"
+                                th:onclick="'solicitarAccesoCVV(' + ${tarjetaPrincipal.id} + ')'">VER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OTRAS TARJETAS -->
+            <div th:each="t : ${otrasTarjetas}" class="card-visual"
+                th:classappend="${t.tipo == 'PREMIUM' ? 'bg-premium' : (t.tipo == 'VIRTUAL' ? 'bg-virtual' : (t.tipo == 'PREPAGO' ? 'bg-prepago' : 'bg-default'))}">
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <div class="bank-logo-container">
+                            <img src="/images/tubanco_logo.png" alt="Logo">
+                        </div>
+                        <span th:text="${t.alias}"
+                            style="font-weight: bold; font-size: 0.9rem; display: block; margin-top: 5px;">ALIAS</span>
+                    </div>
+                    <span th:text="${t.tipo}"
+                        style="font-size: 0.6rem; background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 4px;">TIPO</span>
+                </div>
+
+                <div class="card-number"
+                    th:text="${#strings.substring(t.numero,0,4)} + ' ' + ${#strings.substring(t.numero,4,8)} + ' ' + ${#strings.substring(t.numero,8,12)} + ' ' + ${#strings.substring(t.numero,12,16)}">
+                    0000 0000 0000 0000
+                </div>
+
+                <div class="card-footer">
+                    <div>
+                        <small style="display:block; opacity: 0.7; font-size: 0.6rem;">Vence</small>
+                        <span th:text="${t.fechaCaducidad}" style="font-weight: 600;">MM/AA</span>
+                    </div>
+                    <div>
+                        <small style="display:block; opacity: 0.7; font-size: 0.6rem;">CVV</small>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <span th:id="'cvv-' + ${t.id}" style="font-weight: bold; letter-spacing: 1px;">***</span>
+                            <button class="btn-ver" th:onclick="'solicitarAccesoCVV(' + ${t.id} + ')'">VER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="form-card">
+            <h2>Solicitar Nueva Tarjeta</h2>
+            <form th:action="@{/tarjetas/crear}" method="post">
+                <label style="color: #64748b; font-weight: 600; font-size: 0.9rem;">Selecciona el tipo de
+                    producto</label>
+                <div class="tipo-selector-grid">
+                    <label class="tipo-option">
+                        <input type="radio" name="tipo" value="DEBITO" checked required>
+                        <div class="tipo-box">
+                            <span class="icon">💳</span>
+                            <span class="label">Débito</span>
+                        </div>
+                    </label>
+                    <label class="tipo-option">
+                        <input type="radio" name="tipo" value="PREPAGO">
+                        <div class="tipo-box">
+                            <span class="icon">💰</span>
+                            <span class="label">Prepago</span>
+                        </div>
+                    </label>
+                    <label class="tipo-option">
+                        <input type="radio" name="tipo" value="VIRTUAL">
+                        <div class="tipo-box">
+                            <span class="icon">🌐</span>
+                            <span class="label">Virtual</span>
+                        </div>
+                    </label>
+                    <label class="tipo-option">
+                        <input type="radio" name="tipo" value="PREMIUM">
+                        <div class="tipo-box">
+                            <span class="icon">✨</span>
+                            <span class="label">Premium</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="alias">Nombre Personalizado (Alias)</label>
+                    <input type="text" id="alias" name="alias" placeholder="Ej: Mis ahorros, Compras Online..."
+                        maxlength="20">
+                </div>
+
+                <button type="submit" class="btn-submit">Confirmar y Generar</button>
+                <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function solicitarAccesoCVV(tarjetaId) {
+            const pass = prompt("Introduce tu contraseña de acceso para ver el CVV:");
+            if (!pass) return;
+
+            const token = document.querySelector('input[name="_csrf"]')?.value;
+
+            try {
+                const response = await fetch('/tarjetas/verify-cvv', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': token
+                    },
+                    body: JSON.stringify({ password: pass, tarjetaId: tarjetaId })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const display = document.getElementById('cvv-' + tarjetaId);
+                    display.innerText = data.cvv;
+                    display.style.color = "#4CAF50";
+                    display.style.fontWeight = "bold";
+
+                    setTimeout(() => {
+                        display.innerText = '***';
+                        display.style.color = "inherit";
+                    }, 5000);
+                } else {
+                    alert("Verificación fallida: Contraseña incorrecta.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error técnico al conectar con el banco.");
+            }
+        }
+    </script>
+</body>
+
+</html>
