@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Realizar Transferencia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 400px; }
+        .balance-badge { background: #eef2ff; color: #4f46e5; padding: 10px; border-radius: 10px; text-align: center; margin-bottom: 25px; font-weight: 600; }
+        input { width: 100%; padding: 12px; margin: 10px 0 20px 0; border: 1px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; background: #2d3436; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #636e72; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Transferir dinero</h2>
+        <div class="balance-badge">
+            Tu saldo disponible: <span th:text="${#numbers.formatDecimal(saldo, 1, 2) + ' €'}">0.00 €</span>
+        </div>
+        
+        <form th:action="@{/transferir}" method="post">
+            <label>Email del destinatario</label>
+            <input type="email" name="emailDestino" placeholder="usuario@banco.com" required>
+            
+            <label>Cantidad a enviar</label>
+            <input type="number" name="cantidad" step="0.01" min="0.01" th:max="${saldo}" placeholder="0.00" required>
+            
+            <button type="submit">Enviar dinero ahora</button>
+        </form>
+        
+        <a href="/tubanco" class="back-link">← Volver al panel principal</a>
+    </div>
+</body>
+</html>

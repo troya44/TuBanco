@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Movimientos - TuBanco</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 12px; shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; text-align: center; }
+        .resumen-mes { background: #ebf5fb; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #d4e6f1; }
+        .lista-mov { list-style: none; padding: 0; }
+        .item-mov { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; align-items: center; }
+        .fecha { font-size: 0.85em; color: #7f8c8d; }
+        .establecimiento { font-weight: bold; color: #34495e; display: block; }
+        .importe { font-weight: bold; }
+        .negativo { color: #e74c3c; }
+        .positivo { color: #27ae60; }
+        .btn-volver { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #3498db; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="/tubanco" class="btn-volver">← Volver al Panel</a>
+    
+    <h2>Historial de Movimientos</h2>
+
+    <div class="resumen-mes">
+        <span style="color: #5d6d7e;">Gastos de este mes:</span><br>
+        <strong style="font-size: 1.4em; color: #2c3e50;" th:text="${#numbers.formatDecimal(gastosMes, 1, 2) + ' €'}">0.00 €</strong>
+    </div>
+
+    <ul class="lista-mov">
+        <!-- Bucle Thymeleaf para recorrer los movimientos -->
+        <li class="item-mov" th:each="m : ${movimientos}">
+            <div>
+                <span class="establecimiento" th:text="${m.establecimiento}">Establecimiento</span>
+                <span class="fecha" th:text="${#temporals.format(m.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2024</span>
+            </div>
+            <span th:class="${m.importe < 0} ? 'importe negativo' : 'importe positivo'"
+                th:text="${(m.importe > 0 ? '+' : '') + #numbers.formatDecimal(m.importe, 1, 2) + ' €'}">
+                0.00 €
+            </span>
+        </li>
+    </ul>
+    
+    <div th:if="${#lists.isEmpty(movimientos)}" style="text-align: center; color: #95a5a6; padding: 20px;">
+        No hay movimientos registrados en esta cuenta.
+    </div>
+</div>
+
+</body>
+</html>

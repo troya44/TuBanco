@@ -5,108 +5,276 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - TuBanco</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { display: flex; height: 100vh; background-color: #f4f7f6; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f4f7f6;
+            color: #1e293b;
+        }
+
         /* Barra Lateral */
-        .sidebar { width: 250px; background-color: #2c3e50; color: white; padding: 20px; }
-        .sidebar h2 { color: #4CAF50; margin-bottom: 30px; text-align: center; }
-        .sidebar a { display: block; color: white; text-decoration: none; padding: 15px; border-radius: 5px; margin-bottom: 10px; }
-        .sidebar a:hover { background-color: #34495e; }
-        .sidebar a.active { background-color: #4CAF50; }
+        .sidebar {
+            width: 260px;
+            background-color: #1e293b;
+            color: white;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 {
+            color: #4CAF50;
+            margin-bottom: 40px;
+            text-align: center;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #334155;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: 600;
+        }
 
         /* Contenido Principal */
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        
-        /* Tarjetas de Saldo */
-        .dashboard-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-        .card { background: white; padding: 20px; border-radius: 10px; shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid #4CAF50; }
-        .card h3 { color: #7f8c8d; font-size: 0.9em; margin-bottom: 10px; }
-        .card .amount { font-size: 1.8em; font-weight: bold; color: #2c3e50; }
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
 
-        /* Tabla de Movimientos */
-        .transactions { margin-top: 30px; background: white; padding: 20px; border-radius: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
-        .positive { color: #27ae60; font-weight: bold; }
-        .negative { color: #e74c3c; font-weight: bold; }
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
 
-        .btn-logout { background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .btn-logout {
+            background: #f1f5f9;
+            color: #ef4444;
+            border: 1px solid #fee2e2;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #fee2e2;
+        }
+
+        /* Tarjetas Genéricas */
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .positive { color: #16a34a; font-weight: bold; }
+        .negative { color: #dc2626; font-weight: bold; }
+
+        /* Estilo específico para el botón de revelar CVV */
+        .btn-reveal {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-reveal:hover {
+            background: rgba(255,255,255,0.2);
+        }
     </style>
 </head>
 <body>
 
+    <!-- BARRA LATERAL -->
     <div class="sidebar">
         <h2>TuBanco</h2>
         <a href="#" class="active">Resumen</a>
-        <a href="#">Transferencias</a>
+        <a href="/transferencias">Transferencias</a>
         <a href="#">Mis Tarjetas</a>
         <a href="#">Préstamos</a>
-        <a href="#">Perfil</a>
+        <a href="/perfil">Perfil</a>
     </div>
 
+    <!-- CONTENIDO PRINCIPAL -->
     <div class="main-content">
+        
+        <!-- HEADER -->
         <header>
-            <h1>Hola, Bienvenido a TuBanco</h1>                
+            <div class="user-header" style="display: flex; align-items: center; gap: 15px;">
+                <img th:src="@{'/imagenes/' + ${usuario.fotoPerfil}}"
+                     onerror="this.src='https://ui-avatars.com/api/?name=User'"
+                     style="width: 55px; height: 55px; border-radius: 50%; border: 2px solid #4CAF50; object-fit: cover;">
+                <h1 th:text="'Hola, ' + ${nombre}" style="font-size: 1.6rem; color: #1e293b;"></h1>
+            </div>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="btn-logout">Cerrar Sesión</button>
-            </form>            
+            </form>
         </header>
 
-        <div class="card">
-            <h3>SALDO DISPONIBLE</h3>
-            <div class="amount" th:text="${#numbers.formatDecimal(saldo, 1, 2) + ' €'}">0,00 €</div>
-            <p style="font-size: 0.8em; color: #7f8c8d; margin-top: 5px;">
-                Cuenta: <span th:text="${cuenta}">ES0000...</span>
-            </p>
+        <!-- SECCIÓN 1: LA TARJETA PREMIUM -->
+        <div style="background: linear-gradient(135deg, #0f172a, #334155); color: white; border-radius: 24px; padding: 35px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); position: relative; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.1);">
+            
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;">
+                <h3 style="color: #94a3b8; font-size: 0.8rem; letter-spacing: 2px; font-weight: 600;">Tarjeta de crédito</h3>
+                <img src="/images/tubanco_logo.png" alt="Logo TuBanco" style="width: 60px; height: 30px;">
+            </div>
+            
+            <!-- Número de Tarjeta -->
+            <div style="color: white; letter-spacing: 4px; font-size: 1.7rem; margin-bottom: 35px; font-family: 'Courier New', monospace; text-shadow: 0 2px 4px rgba(0,0,0,0.3);"
+                th:text="${#strings.substring(tarjeta,0,4)} + ' ' + ${#strings.substring(tarjeta,4,8)} + ' ' + ${#strings.substring(tarjeta,8,12)} + ' ' + ${#strings.substring(tarjeta,12,16)}">
+                0000 0000 0000 0000
+            </div>
+
+            <!-- EXP y CVV -->
+            <div style="display: flex; gap: 50px; align-items: center;">
+                <div>
+                    <span style="color: #94a3b8; font-size: 0.65rem; display: block; margin-bottom: 4px; letter-spacing: 1px;">VALID THRU</span>
+                    <span style="font-weight: 600; font-size: 1rem;" th:text="${caducidad}">MM/YY</span>
+                </div>
+                <div>
+                    <span style="color: #94a3b8; font-size: 0.65rem; display: block; margin-bottom: 4px; letter-spacing: 1px;">CVV CODE</span>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span id="cvv-value" style="font-weight: 600; font-family: monospace; font-size: 1rem;">***</span>
+                        <button onclick="revelarCVV()" class="btn-reveal">Ver CVV</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de Progreso del Límite -->
+            <div style="margin-top: 35px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #cbd5e1; margin-bottom: 10px;">
+                    <span>Límite de crédito utilizado</span>
+                    <span th:text="${#numbers.formatDecimal(gastosMes, 1, 2)} + ' / ' + ${usuario.limiteMensual} + ' €'"></span>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px;">
+                    <div th:style="'background: #4CAF50; height: 100%; border-radius: 10px; width: ' + (${gastosMes} / (${usuario.limiteMensual} ?: 1) * 100) + '%'"></div>
+                </div>
+            </div>
         </div>
 
-        <div class="dashboard-cards">
-            <div class="card">
-                <h3>SALDO DISPONIBLE</h3>
-                <div class="amount">1.250,50 €</div>
+        <!-- SECCIÓN 2: SALDO Y ACCIONES -->
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; margin-bottom: 30px;">
+            <!-- Saldo -->
+            <div class="card" style="display: flex; flex-direction: column; justify-content: center; border-left: 5px solid #27ae60;">
+                <h3 style="color: #64748b; font-size: 0.9rem; margin-bottom: 8px;">SALDO DISPONIBLE</h3>
+                <div style="font-size: 2.2rem; font-weight: 800; color: #1e293b;" th:text="${#numbers.formatDecimal(saldo, 1, 2) + ' €'}">0,00 €</div>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">IBAN: <span th:text="${cuenta}">ES00...</span></p>
             </div>
-            <div class="card" style="border-left-color: #3498db;">
-                <h3>AHORROS</h3>
-                <div class="amount">4.300,00 €</div>
-            </div>
-            <div class="card" style="border-left-color: #f1c40f;">
-                <h3>TARJETA DE CRÉDITO</h3>
-                <div class="amount">-120,25 €</div>
+
+            <!-- Botones Rápidos -->
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <a href="/transferencias"
+                    style="background: #3b82f6; color: white; padding: 18px; border-radius: 16px; text-decoration: none; font-weight: 700; text-align: center; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3); transition: 0.3s;">
+                    + Enviar Dinero
+                </a>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                     <a href="/movimientos" style="background: white; border: 1px solid #e2e8f0; color: #475569; padding: 14px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; font-weight: 600; text-align: center; transition: 0.3s;">
+                        Historial
+                    </a>
+                    <a href="/perfil" style="background: white; border: 1px solid #e2e8f0; color: #475569; padding: 14px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; font-weight: 600; text-align: center; transition: 0.3s;">
+                        Mi Perfil
+                    </a>
+                </div>
             </div>
         </div>
 
-        <div class="transactions">
-            <h3>Últimos Movimientos</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Concepto</th>
-                        <th>Importe</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>28 Ene 2026</td>
-                        <td>Nómina Enero</td>
-                        <td class="positive">+1.800,00 €</td>
-                    </tr>
-                    <tr>
-                        <td>27 Ene 2026</td>
-                        <td>Supermercado Mercadona</td>
-                        <td class="negative">-45,20 €</td>
-                    </tr>
-                    <tr>
-                        <td>25 Ene 2026</td>
-                        <td>Suscripción Netflix</td>
-                        <td class="negative">-12,99 €</td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- SECCIÓN 3: ACTIVIDAD RECIENTE -->
+        <div class="card" style="padding: 30px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h3 style="color: #1e293b; font-size: 1.2rem; font-weight: 700;">Actividad Reciente</h3>
+                <a href="/movimientos" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem; font-weight: 600;">Ver todo</a>
+            </div>
+
+            <div class="transaction-list">
+                <div th:each="m, iterStat : ${movimientos}" th:if="${iterStat.index < 4}"
+                    style="display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid #f1f5f9;">
+
+                    <div style="display: flex; align-items: center; gap: 18px;">
+                        <div th:style="'width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; ' + (${m.importe < 0} ? 'background: #fff1f2; color: #e11d48;' : 'background: #f0fdf4; color: #16a34a;')">
+                            <span th:text="${#strings.substring(m.establecimiento,0,1).toUpperCase()}"></span>
+                        </div>
+                        <div>
+                            <p th:text="${m.establecimiento}" style="margin: 0; font-weight: 600; color: #1e293b; font-size: 1rem;"></p>
+                            <small th:text="${#temporals.format(m.fecha, 'dd MMM yyyy')}" style="color: #94a3b8; font-size: 0.8rem;"></small>
+                        </div>
+                    </div>
+
+                    <div th:class="${m.importe < 0} ? 'negative' : 'positive'" style="font-size: 1.1rem; letter-spacing: -0.5px;">
+                        <span th:text="${(m.importe > 0 ? '+' : '') + #numbers.formatDecimal(m.importe, 1, 2) + ' €'}"></span>
+                    </div>
+                </div>
+                
+                <div th:if="${#lists.isEmpty(movimientos)}" style="text-align: center; padding: 40px; color: #94a3b8;">
+                    <p>No hay movimientos registrados este mes.</p>
+                </div>
+            </div>
         </div>
+
     </div>
 
+    <!-- SCRIPT CVV -->
+    <script>
+        async function revelarCVV() {
+            const password = prompt("Por seguridad, introduce tu contraseña para ver el CVV:");
+            if (!password) return;
+
+            try {
+                const response = await fetch('/api/auth/verify-cvv', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const cvvEl = document.getElementById('cvv-value');
+                    cvvEl.innerText = data.cvv;
+                    cvvEl.style.color = "#4CAF50";
+                    
+                    setTimeout(() => {
+                        cvvEl.innerText = '***';
+                        cvvEl.style.color = "white";
+                    }, 8000);
+                } else {
+                    alert("Contraseña incorrecta.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+    </script>
 </body>
 </html>

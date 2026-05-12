@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Mi Perfil - Seguridad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .section {
+            border-bottom: 1px solid #edf2f7;
+            padding: 20px 0;
+        }
+
+        .section:last-child {
+            border: none;
+        }
+
+        label {
+            display: block;
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .btn-save {
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-save:hover {
+            background: #334155;
+        }
+
+        .btn-foto {
+            background: #3b82f6;
+        }
+
+        .btn-foto:hover {
+            background: #2563eb;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-exito {
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Configuración de Perfil</h2>
+
+        <!-- Mensajes de Feedback -->
+        <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+        <div th:if="${exito}" class="alert-exito" th:text="${exito}"></div>
+
+        <!-- FORMULARIO 1: FOTO DE PERFIL (Independiente) -->
+        <div class="section">
+            <h3>Foto de Perfil</h3>
+            <img th:src="@{'/imagenes/' + ${usuario.fotoPerfil}}"
+                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid #e2e8f0;">
+
+            <!-- Este formulario solo se encarga de la imagen -->
+            <form th:action="@{/perfil/subir-foto}" method="post" enctype="multipart/form-data">
+                <input type="file" name="archivo" accept="image/*" required>
+                <button type="submit" class="btn-save btn-foto" style="margin-top: 10px;">Cambiar Foto de
+                    Perfil</button>
+            </form>
+        </div>
+
+        <!-- FORMULARIO 2: SEGURIDAD Y LÍMITES (Independiente) -->
+        <form th:action="@{/perfil/actualizar-seguridad}" method="post">
+
+            <div class="section">
+                <h3>Límite Mensual</h3>
+                <p style="font-size: 0.9rem; color: #94a3b8;">Establece el máximo que quieres gastar este mes.</p>
+                <label>Límite actual: <span th:text="${usuario.limiteMensual} + ' €'">1000€</span></label>
+                <input type="number" name="nuevoLimite" step="0.01" th:placeholder="${usuario.limiteMensual}">
+            </div>
+
+            <div class="section">
+                <h3>Cambiar Contraseña</h3>
+                <label>Nueva contraseña (dejar en blanco si no deseas cambiarla)</label>
+                <input type="password" name="nuevaPassword">
+            </div>
+
+            <div class="section"
+                style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <h3 style="margin-top: 0; color: #e11d48;">Confirmar Cambios</h3>
+                <p style="font-size: 0.85rem;">Introduce tu <b>contraseña actual</b> para aplicar los cambios de
+                    seguridad:</p>
+                <input type="password" name="passwordActual" required style="border: 2px solid #cbd5e1;">
+                <button type="submit" class="btn-save">Guardar Cambios de Seguridad</button>
+            </div>
+        </form>
+
+        <a href="/tubanco"
+            style="display: block; text-align: center; margin-top: 20px; color: #64748b; text-decoration: none;">
+            ← Volver al Dashboard
+        </a>
+    </div>
+</body>
+
+</html>
