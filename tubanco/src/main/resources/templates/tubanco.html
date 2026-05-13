@@ -6,196 +6,206 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TuBanco - Resumen</title>
     <style>
+        /* PALETA DE COLORES CORPORATIVA */
+        :root {
+            --primary-green: #4CAF50;
+            --dark-green: #1b4332;
+            --bg-light: #f1f5f9;
+            --sidebar-dark: #0f172a;
+            --text-main: #1e293b;
+            --accent-blue: #2563eb;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 25px -5px rgba(76, 175, 80, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
         /* ESTILOS BASE */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
             display: flex;
             height: 100vh;
-            background-color: #f4f7f6;
-            color: #1e293b;
+            background-color: var(--bg-light);
+            color: var(--text-main);
         }
 
-        /* Barra Lateral */
+        /* Barra Lateral - Rediseño Elegante */
         .sidebar {
-            width: 260px;
-            background-color: #1e293b;
+            width: 280px;
+            background: linear-gradient(180deg, var(--sidebar-dark) 0%, #020617 100%);
             color: white;
-            padding: 25px;
+            padding: 35px 25px;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
+            border-right: 4px solid var(--primary-green);
         }
 
         .sidebar h2 {
-            color: #4CAF50;
-            margin-bottom: 40px;
+            color: var(--primary-green);
+            margin-bottom: 50px;
             text-align: center;
             font-size: 1.8rem;
-            letter-spacing: 1px;
+            font-weight: 800;
+            letter-spacing: -1px;
         }
+
+
 
         .sidebar a {
             display: block;
-            color: #cbd5e1;
+            color: #94a3b8;
             text-decoration: none;
-            padding: 14px 18px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            transition: all 0.3s;
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar a:hover {
-            background-color: #334155;
+            background-color: rgba(255, 255, 255, 0.05);
             color: white;
+            transform: translateX(5px);
         }
 
         .sidebar a.active {
-            background-color: #4CAF50;
+            background-color: var(--primary-green);
             color: white;
-            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
         }
 
         /* Contenido Principal */
         .main-content {
             flex: 1;
-            padding: 40px;
+            padding: 40px 60px;
             overflow-y: auto;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 35px;
+            margin-bottom: 45px;
         }
 
         .btn-logout {
-            background: #f1f5f9;
+            background: #ffffff;
             color: #ef4444;
             border: 1px solid #fee2e2;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 10px 22px;
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             transition: 0.3s;
+            box-shadow: var(--shadow-sm);
         }
 
         .btn-logout:hover {
-            background: #fee2e2;
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+            transform: translateY(-2px);
         }
 
         .card {
             background: white;
             padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-radius: 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(255, 255, 255, 0.7);
         }
 
-        /* ESTILOS DEL LOGO SUSTITUTO DEL CHIP */
+        /* GRID PARA TARJETAS */
+        .grid-cuentas {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 35px;
+        }
+
+        @media (min-width: 1024px) {
+            .grid-cuentas {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ESTILOS DEL LOGO */
         .bank-logo-container {
-            width: 60px;
-            height: 45px;
+            width: 55px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 4px;
-            padding: 5px;
-            backdrop-filter: blur(4px);
+            border-radius: 8px;
+            padding: 6px;
         }
 
         .bank-logo-container img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.2));
-            border-radius: 4px;
         }
 
-        /* CARRUSEL */
+        /* CARRUSEL REDISEÑADO */
         .carrusel-horizontal {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             overflow-x: auto;
-            padding: 15px 5px;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: thin;
-            scrollbar-color: #4CAF50 transparent;
+            padding: 15px 5px 25px;
+            scrollbar-width: none;
         }
 
         .carrusel-horizontal::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .carrusel-horizontal::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
+            display: none;
         }
 
         .tarjeta-item {
             min-width: 320px;
-            flex-shrink: 0;
-            scroll-snap-align: start;
-            height: 190px;
-            border-radius: 20px;
+            height: 195px;
+            border-radius: 22px;
             padding: 25px;
             color: white;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
         }
 
         .tarjeta-item:hover {
             transform: translateY(-5px);
         }
 
-        .tarjeta-secundaria {
-            background: linear-gradient(135deg, #1e293b, #475569);
-        }
-
-        .tarjeta-nueva {
-            background: transparent;
-            border: 2px dashed #cbd5e1;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .positive { color: #16a34a; font-weight: bold; }
-        .negative { color: #dc2626; font-weight: bold; }
-
-        /* --- NUEVOS ESTILOS PARA EL CHAT FLOTANTE --- */
+        /* CHAT FLOTANTE */
         .chat-widget {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 40px;
+            right: 40px;
             z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
         }
 
         .chat-button {
-            width: 60px;
-            height: 60px;
-            background: #4CAF50;
+            width: 65px;
+            height: 65px;
+            background: var(--primary-green);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
             transition: 0.3s;
         }
 
@@ -204,75 +214,108 @@
         }
 
         .chat-window {
-            width: 320px;
-            height: 450px;
+            width: 350px;
+            height: 500px;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 15px;
-            display: none; /* Oculto por defecto */
+            border-radius: 24px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+            display: none;
             flex-direction: column;
             overflow: hidden;
-            animation: fadeIn 0.3s ease-out;
+            border: 1px solid #e2e8f0;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+
+
+
+
+        /* Contenedor principal: 1 columna en móvil, 2 en PC */
+        .contenedor-saldo-acciones {
+            display: grid;
+            grid-template-columns: 1fr;
+            /* Por defecto una columna (móvil) */
+            gap: 20px;
+            margin-top: 35px;
+            width: 100%;
         }
 
-        .chat-header {
-            background: #1e293b;
+        @media (min-width: 768px) {
+            .contenedor-saldo-acciones {
+                grid-template-columns: 1.2fr 1fr;
+                /* Dos columnas en pantallas grandes */
+                gap: 30px;
+            }
+        }
+
+        /* Ajustes de la tarjeta de saldo */
+        .card-saldo {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 6px solid var(--primary-green);
+            padding: 25px;
+        }
+
+        .saldo-titulo {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .saldo-monto {
+            font-size: clamp(2rem, 8vw, 3rem);
+            /* Tamaño fluido: se encoge en móvil */
+            font-weight: 900;
+            color: var(--sidebar-dark);
+            letter-spacing: -1.5px;
+            word-break: break-all;
+            /* Evita que el número grande rompa la tarjeta */
+        }
+
+        /* Grupo de botones */
+        .grupo-acciones {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .btn-transferencia {
+            background: var(--primary-green);
             color: white;
             padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: 18px;
+            text-decoration: none;
+            font-weight: 800;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.25);
+            transition: 0.3s;
+            font-size: 1rem;
+            display: block;
         }
 
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: #f8fafc;
+        .grid-botones-pequenos {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            /* Siempre dos columnas para estos botones */
+            gap: 15px;
+        }
+
+        .btn-secundario {
+            padding: 16px !important;
+            text-decoration: none;
             font-size: 0.9rem;
-        }
-
-        .msg {
-            margin-bottom: 10px;
-            padding: 10px 14px;
-            border-radius: 12px;
-            max-width: 80%;
-        }
-
-        .msg-bot {
-            background: #e2e8f0;
-            color: #1e293b;
-            align-self: flex-start;
-        }
-
-        .chat-footer {
-            padding: 15px;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-footer input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            outline: none;
-        }
-
-        .btn-send {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
+            font-weight: 700;
+            text-align: center;
+            color: var(--text-main);
+            border: 1px solid #e2e8f0;
+            transition: 0.2s;
+            margin: 0;
+            /* Quita márgenes extra */
         }
     </style>
 </head>
@@ -281,6 +324,7 @@
 
     <div class="sidebar">
         <h2>TuBanco</h2>
+        <img th:src="@{/images/tubanco_logo.png}" alt="Logo" style="width: 50%; margin-bottom: 40px; opacity: 0.8; margin-left: auto; margin-right: auto; display: block;">
         <a href="#" class="active">Resumen</a>
         <a href="/transferencias">Transferencias</a>
         <a href="/tarjetas">Mis Tarjetas</a>
@@ -290,166 +334,264 @@
     <div class="main-content">
 
         <header>
-            <div class="user-header" style="display: flex; align-items: center; gap: 15px;">
+            <div style="display: flex; align-items: center; gap: 20px;">
                 <img th:src="@{'/imagenes/' + ${usuario.fotoPerfil}}"
-                    onerror="this.src='https://ui-avatars.com/api/?name=User'"
-                    style="width: 55px; height: 55px; border-radius: 50%; border: 2px solid #4CAF50; object-fit: cover;">
-                <h1 th:text="'Hola, ' + ${nombre}" style="font-size: 1.6rem; color: #1e293b;"></h1>
+                    onerror="this.src='https://ui-avatars.com/api/?name=User&background=4CAF50&color=fff'"
+                    style="width: 65px; height: 65px; border-radius: 50%; border: 3px solid white; box-shadow: var(--shadow-sm); object-fit: cover;">
+                <div>
+                    <h1 th:text="'Hola, ' + ${nombre}"
+                        style="font-size: 1.8rem; font-weight: 800; color: var(--sidebar-dark); letter-spacing: -0.5px;">
+                    </h1>
+                    <p style="color: #64748b; font-size: 0.9rem; font-weight: 500;">Bienvenido de nuevo</p>
+                </div>
             </div>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="btn-logout">Cerrar Sesión</button>
             </form>
         </header>
 
-        <!-- SECCIÓN: TARJETA PRINCIPAL CON LOGO -->
-        <div th:if="${tarjetaPrincipal != null}"
-            style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 30px; border-radius: 20px; margin-bottom: 30px; color: white; box-shadow: 0 10px 20px rgba(37,99,235,0.2); position: relative; overflow: hidden;">
+        <!-- SECCIÓN DE TARJETAS LADO A LADO -->
+        <div class="grid-cuentas">
 
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px;">
-                <div>
-                    <p style="font-size: 0.8rem; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px;">Tarjeta Principal</p>
-                    <h3 th:text="${tarjetaPrincipal.tipo}" style="font-size: 1.2rem;">DEBITO</h3>
-                </div>
-                <div class="bank-logo-container">
-                    <img src="/images/tubanco_logo.png" alt="Logo">
-                </div>
-            </div>
+            <!-- 1. TARJETA DE CUENTA IBAN -->
+            <div class="card"
+                style="background: linear-gradient(145deg, #ffffff, #f0fdf4); border: 1px solid rgba(74, 175, 80, 0.2); display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; position: relative;">
 
-            <div style="font-family: 'Courier New', monospace; font-size: 1.8rem; letter-spacing: 4px; margin-bottom: 35px;"
-                th:text="${#strings.substring(tarjetaPrincipal.numero,0,4)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,4,8)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,8,12)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,12,16)}">
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <div>
-                    <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px;">TITULAR</p>
-                    <p th:text="${nombre}" style="text-transform: uppercase; font-weight: 600; letter-spacing: 1px;"></p>
-                </div>
-                <div style="display: flex; gap: 30px; text-align: right;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px;">CADUCA</p>
-                        <p th:text="${tarjetaPrincipal.fechaCaducidad}" style="font-weight: 600;"></p>
+                        <h4
+                            style="color: var(--primary-green); font-size: 1.1rem; font-weight: 900; margin: 0; letter-spacing: -0.5px;">
+                            TuBanco</h4>
+                        <span
+                            style="font-size: 0.7rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Cuenta
+                            Global Corriente</span>
                     </div>
+                    <span
+                        style="font-size: 0.65rem; color: var(--primary-green); font-weight: 800; background: white; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(74, 175, 80, 0.3);">IBAN
+                        ES</span>
+                </div>
+
+                <div
+                    style="background: white; border-radius: 16px; padding: 22px 10px; border: 1px solid #f1f5f9; text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                    <code id="ibanDisplay"
+                        style="font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 700; color: #334155; white-space: nowrap; letter-spacing: 2px; display: block;"
+                        th:data-full-iban="${cuenta}"
+                        th:text="${#strings.substring(cuenta,0,4)} + ' •••• •••• •••• ' + ${#strings.substring(cuenta,cuenta.length()-4, cuenta.length())}">
+                    </code>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
-                        <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px;">CVV</p>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <span id="cvv-value" style="font-family: monospace; font-weight: bold; font-size: 1.1rem;">***</span> 
-                            <button type="button" onclick="revelarCVV()" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: white; cursor: pointer; border-radius: 4px; padding: 2px 8px; font-size: 0.65rem; font-weight: bold;">VER</button>
+                        <p
+                            style="font-size: 0.6rem; color: #94a3b8; font-weight: 800; text-transform: uppercase; margin-bottom: 2px;">
+                            Titular de la cuenta</p>
+                        <p style="color: var(--sidebar-dark); font-size: 0.95rem; font-weight: 700; margin: 0; text-transform: uppercase;"
+                            th:text="${usuario.nombre} + ' ' + ${usuario.apellidos}">NOMBRE</p>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="verificarParaMostrar()" id="btnRevealIban"
+                            style="background: var(--sidebar-dark); color: white; border: none; padding: 10px 16px; border-radius: 10px; cursor: pointer; font-size: 0.7rem; font-weight: 700; transition: 0.3s;">MOSTRAR</button>
+                        <button onclick="verificarParaCopiar()" id="btnCopyIban" disabled
+                            style="background: #e2e8f0; color: #94a3b8; border: none; padding: 10px 16px; border-radius: 10px; font-size: 0.7rem; font-weight: 700;">COPIAR</button>
+                    </div>
+                </div>
+
+                <div id="ibanToast"
+                    style="position: absolute; top: 25px; right: 25px; color: var(--dark-green); font-size: 0.75rem; font-weight: 900; opacity: 0; transition: 0.3s; pointer-events: none; background: #dcfce7; padding: 4px 10px; border-radius: 8px;">
+                    ¡COPIADO!</div>
+            </div>
+
+            <!-- 2. TARJETA DE DÉBITO PRINCIPAL -->
+            <div th:if="${tarjetaPrincipal != null}"
+                style="background: linear-gradient(135deg, #2563eb, #1e40af); padding: 28px; border-radius: 24px; color: white; box-shadow: 0 15px 30px rgba(37,99,235,0.25); display: flex; flex-direction: column; justify-content: space-between; min-height: 240px;">
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div>
+                        <p
+                            style="font-size: 0.7rem; opacity: 0.9; text-transform: uppercase; font-weight: 600; letter-spacing: 1px;">
+                            Visa Infinite</p>
+                        <h3 th:text="${tarjetaPrincipal.tipo}" style="font-size: 1.2rem; margin: 0; font-weight: 800;">
+                            DÉBITO</h3>
+                    </div>
+                    <div class="bank-logo-container"
+                        style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);">
+                        <img th:src="@{/images/tubanco_logo.png}" alt="Logo">
+                    </div>
+                </div>
+
+                <div style="font-family: 'Courier New', monospace; font-size: 1.5rem; letter-spacing: 4px; text-align: center; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.2);"
+                    th:text="${#strings.substring(tarjetaPrincipal.numero,0,4)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,4,8)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,8,12)} + ' ' + ${#strings.substring(tarjetaPrincipal.numero,12,16)}">
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <p style="font-size: 0.6rem; opacity: 0.8; margin: 0; font-weight: 700;">CARD HOLDER</p>
+                        <p th:text="${nombre}"
+                            style="text-transform: uppercase; font-weight: 700; font-size: 0.95rem; margin: 0;"></p>
+                    </div>
+                    <div style="display: flex; gap: 25px; text-align: right;">
+                        <div>
+                            <p style="font-size: 0.6rem; opacity: 0.8; margin: 0; font-weight: 700;">EXPIRES</p>
+                            <p th:text="${tarjetaPrincipal.fechaCaducidad}"
+                                style="font-weight: 700; font-size: 0.95rem; margin: 0;"></p>
+                        </div>
+                        <div>
+                            <p style="font-size: 0.6rem; opacity: 0.8; margin: 0; font-weight: 700;">CVV</p>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span id="cvv-value"
+                                    style="font-family: monospace; font-weight: 900; font-size: 1rem;">***</span>
+                                <button onclick="revelarCVV()"
+                                    style="background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); color: white; cursor: pointer; border-radius: 6px; padding: 3px 8px; font-size: 0.65rem; font-weight: 800;">VER</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN: OTRAS TARJETAS CON LOGO -->
-        <h3 style="font-size: 1rem; color: #64748b; margin-bottom: 15px; font-weight: 600;">Mis otras tarjetas</h3>
-        <div class="carrusel-horizontal">
-            <div th:each="t : ${misTarjetas}" class="tarjeta-item tarjeta-secundaria">
-                <div style="display: flex; justify-content: space-between;">
-                    <div class="bank-logo-container" style="width: 50px; height: 35px;">
-                        <img src="/images/tubanco_logo.png" alt="Logo">
-                    </div>
-                    <span th:text="${t.tipo}" style="font-size: 0.7rem; font-weight: bold; opacity: 0.6;">TIPO</span>
-                </div>
+        <!-- SALDO Y ACCIONES RÁPIDAS -->
+        <div class="contenedor-saldo-acciones">
+            <!-- Tarjeta de Saldo -->
+            <div class="card card-saldo">
+                <h3 class="saldo-titulo">SALDO DISPONIBLE</h3>
+                <div class="saldo-monto" th:text="${#numbers.formatDecimal(saldo, 1, 2) + ' €'}">1000.00 €</div>
+            </div>
 
-                <div style="font-size: 1.2rem; letter-spacing: 2px; font-family: 'Courier New', monospace; margin-top: 15px;"
-                    th:text="'**** **** **** ' + ${#strings.substring(t.numero, 12, 16)}">
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                    <span th:text="${nombre}" style="font-size: 0.8rem; text-transform: uppercase;">NOMBRE</span>
-                    <span th:text="${t.fechaCaducidad}" style="font-size: 0.8rem;">00/00</span>
+            <!-- Botones de Acción -->
+            <div class="grupo-acciones">
+                <a href="/transferencias" class="btn-transferencia">
+                    + Realizar Transferencia
+                </a>
+                <div class="grid-botones-pequenos">
+                    <a href="/movimientos" class="card btn-secundario">Movimientos</a>
+                    <a href="/perfil" class="card btn-secundario">Configuración</a>
                 </div>
             </div>
         </div>
 
-        <!-- SALDO Y ACCIONES -->
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; margin-top: 30px; margin-bottom: 30px;">
-            <div class="card" style="display: flex; flex-direction: column; justify-content: center; border-left: 5px solid #27ae60;">
-                <h3 style="color: #64748b; font-size: 0.9rem; margin-bottom: 8px;">SALDO DISPONIBLE</h3>
-                <div style="font-size: 2.2rem; font-weight: 800; color: #1e293b;"
-                    th:text="${#numbers.formatDecimal(saldo, 1, 2) + ' €'}"></div>
-                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 5px;">IBAN: <span th:text="${cuenta}"></span></p>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <a href="/transferencias" style="background: #3b82f6; color: white; padding: 18px; border-radius: 16px; text-decoration: none; font-weight: 700; text-align: center; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);">
-                    + Enviar Dinero
-                </a>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <a href="/movimientos" class="card" style="padding: 14px; text-decoration: none; font-size: 0.9rem; font-weight: 600; text-align: center; color: #475569;">Historial</a>
-                    <a href="/perfil" class="card" style="padding: 14px; text-decoration: none; font-size: 0.9rem; font-weight: 600; text-align: center; color: #475569;">Mi Perfil</a>
+        <h3 style="font-size: 1.1rem; color: var(--sidebar-dark); margin: 40px 0 20px; font-weight: 800;">Otras tarjetas
+            vinculadas</h3>
+        <div class="carrusel-horizontal">
+            <div th:each="t : ${misTarjetas}" class="tarjeta-item">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="bank-logo-container" style="background: rgba(255,255,255,0.1); padding: 4px;">
+                        <img th:src="@{/images/tubanco_logo.png}" alt="Logo">
+                    </div>
+                    <span th:text="${t.tipo}"
+                        style="font-size: 0.75rem; font-weight: 800; opacity: 0.7; text-transform: uppercase;">TIPO</span>
+                </div>
+                <div style="font-size: 1.4rem; letter-spacing: 3px; font-family: 'Courier New', monospace; font-weight: bold;"
+                    th:text="'•••• •••• •••• ' + ${#strings.substring(t.numero, 12, 16)}"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 0.85rem;">
+                    <span th:text="${nombre}" style="text-transform: uppercase; font-weight: 700;">NOMBRE</span>
+                    <div style="text-align: right;">
+                        <p style="font-size: 0.6rem; opacity: 0.6; margin: 0;">VALIDEZ</p>
+                        <span th:text="${t.fechaCaducidad}" style="font-weight: 700;">00/00</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- WIDGET DE CHAT FLOTANTE -->
+    <!-- CHAT -->
     <div class="chat-widget">
         <div class="chat-window" id="chatWindow">
-            <div class="chat-header">
-                <div>
-                    <strong>Soporte TuBanco</strong><br>
-                    <small style="opacity: 0.8;">En línea ahora</small>
+            <div class="chat-header"
+                style="background: var(--sidebar-dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 10px; height: 10px; background: var(--primary-green); border-radius: 50%;"></div>
+                    <strong style="font-size: 0.95rem;">Soporte TuBanco</strong>
                 </div>
-                <button onclick="toggleChat()" style="background:none; border:none; color:white; cursor:pointer; font-size: 1.2rem;">×</button>
+                <button onclick="toggleChat()"
+                    style="background:none; border:none; color:white; cursor:pointer; font-size: 1.5rem; font-weight: 300;">&times;</button>
             </div>
-            <div class="chat-messages" id="chatContent">
-                <div class="msg msg-bot">
-                    ¡Hola! Soy el asistente virtual de TuBanco. ¿En qué puedo ayudarte con tus incidencias hoy?
-                </div>
+            <div class="chat-messages" id="chatContent"
+                style="flex:1; padding:20px; overflow-y:auto; background:#f8fafc; display: flex; flex-direction: column; gap: 12px;">
+                <div
+                    style="background: white; padding: 12px 16px; border-radius: 16px; border: 1px solid #e2e8f0; font-size:0.9rem; max-width:85%; color: var(--text-main); box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                    ¡Hola! Soy tu asistente de TuBanco. ¿Cómo puedo ayudarte hoy?</div>
             </div>
-            <div class="chat-footer">
-                <input type="text" id="userInput" placeholder="Escribe tu mensaje...">
-                <button class="btn-send" onclick="sendMessage()">➤</button>
+            <div class="chat-footer"
+                style="padding:15px 20px; border-top:1px solid #e2e8f0; display:flex; gap:12px; background: white;">
+                <input type="text" id="userInput"
+                    style="flex:1; border:1px solid #e2e8f0; border-radius:12px; padding:12px; outline: none; font-size: 0.9rem;"
+                    placeholder="Escribe tu mensaje...">
+                <button onclick="sendMessage()"
+                    style="background: var(--primary-green); color:white; border:none; width: 45px; height: 45px; border-radius: 12px; cursor:pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
             </div>
         </div>
         <div class="chat-button" onclick="toggleChat()">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
         </div>
     </div>
 
     <script>
-        // Función para abrir/cerrar chat
+        let ibanRevelado = false;
+
         function toggleChat() {
             const chat = document.getElementById('chatWindow');
             chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        // Función para simular envío de mensaje
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const content = document.getElementById('chatContent');
-            if (input.value.trim() === "") return;
-
-            // Mensaje usuario
-            const userMsg = document.createElement('div');
-            userMsg.className = "msg";
-            userMsg.style.background = "#4CAF50";
-            userMsg.style.color = "white";
-            userMsg.style.alignSelf = "flex-end";
-            userMsg.style.marginLeft = "auto";
-            userMsg.innerText = input.value;
-            content.appendChild(userMsg);
-
-            // Respuesta automática o envío a soporte
-            const botMsg = document.createElement('div');
-            botMsg.className = "msg msg-bot";
-            botMsg.innerText = "He recibido tu mensaje. Un agente revisará tu caso en breve. También puedes escribirnos a soporte@tubanco.com";
-            
-            setTimeout(() => {
-                content.appendChild(botMsg);
-                content.scrollTop = content.scrollHeight;
-            }, 1000);
-
-            input.value = "";
-            content.scrollTop = content.scrollHeight;
+        function formatIban(iban) {
+            return iban.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
         }
 
-        // Tu función original de CVV
+        async function verificarParaMostrar() {
+            const ibanElement = document.getElementById('ibanDisplay');
+            const btnReveal = document.getElementById('btnRevealIban');
+            const btnCopy = document.getElementById('btnCopyIban');
+            const fullIban = ibanElement.getAttribute('data-full-iban');
+
+            if (ibanRevelado) {
+                ibanElement.innerText = fullIban.substring(0, 4) + " •••• •••• •••• " + fullIban.substring(fullIban.length - 4);
+                btnReveal.innerText = "MOSTRAR";
+                btnCopy.disabled = true;
+                btnCopy.style.background = "#e2e8f0";
+                btnCopy.style.color = "#94a3b8";
+                ibanRevelado = false;
+                return;
+            }
+
+            const password = prompt("Seguridad TuBanco: Introduce tu contraseña para ver el IBAN:");
+            if (password) {
+                ibanElement.innerText = formatIban(fullIban);
+                ibanRevelado = true;
+                btnReveal.innerText = "OCULTAR";
+                btnCopy.disabled = false;
+                btnCopy.style.background = "var(--primary-green)";
+                btnCopy.style.color = "white";
+                btnCopy.style.cursor = "pointer";
+                btnCopy.style.boxShadow = "0 4px 10px rgba(76, 175, 80, 0.2)";
+            }
+        }
+
+        function verificarParaCopiar() {
+            const ibanElement = document.getElementById('ibanDisplay');
+            const fullIban = ibanElement.getAttribute('data-full-iban');
+            const toast = document.getElementById('ibanToast');
+
+            navigator.clipboard.writeText(fullIban).then(() => {
+                toast.style.opacity = "1";
+                toast.style.transform = "translateY(-5px)";
+                setTimeout(() => {
+                    toast.style.opacity = "0";
+                    toast.style.transform = "translateY(0px)";
+                }, 2000);
+            });
+        }
+
         async function revelarCVV() {
-            const password = prompt("Por seguridad, introduce tu contraseña para ver el CVV:");
+            const password = prompt("Seguridad TuBanco: Introduce tu contraseña para ver el CVV:");
             if (!password) return;
             const csrfToken = document.querySelector('input[name="_csrf"]')?.value;
 
@@ -464,18 +606,19 @@
                     const data = await response.json();
                     const cvvEl = document.getElementById('cvv-value');
                     cvvEl.innerText = data.cvv;
-                    cvvEl.style.color = "#81c784";
+                    cvvEl.style.color = "#4CAF50";
                     setTimeout(() => {
                         cvvEl.innerText = '***';
                         cvvEl.style.color = "white";
-                    }, 8000);
+                    }, 5000);
                 } else {
-                    alert("Contraseña incorrecta o sesión expirada.");
+                    alert("Contraseña incorrecta.");
                 }
             } catch (error) {
-                alert("Error de conexión con el servidor.");
+                alert("Error de conexión.");
             }
         }
     </script>
 </body>
+
 </html>

@@ -177,31 +177,51 @@ public class ViewController implements WebMvcConfigurer {
     @PostMapping("/transferir")
     public String realizarTransferencia(@RequestParam String emailDestino,
             @RequestParam Double cantidad,
-            Authentication auth) {
+            Authentication auth,
+            RedirectAttributes redirectAttributes) { // Añadimos esto para pasar mensajes
 
+        // 1. Obtener emisor de forma segura
         Usuario emisor = usuarioRepository.findByEmail(auth.getName()).get();
-        Usuario receptor = usuarioRepository.findByEmail(emailDestino)
-                .orElseThrow(() -> new RuntimeException("Destinatario no encontrado"));
 
-        if (emisor.getSaldo() < cantidad)
-            return "redirect:/transferencias?error=Saldo insuficiente";
+        // 2. BUSCAR RECEPTOR (Cambiamos el orElseThrow por un Optional)
+        Optional<Usuario> receptorOpt = usuarioRepository.findByEmail(emailDestino);
 
-        // ACTUALIZACIÓN DE SALDOS
+        // 3. VALIDAR SI EXISTE EL CLIENTE
+        if (receptorOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "El destinatario no existe en nuestro sistema.");
+            return "redirect:/transferencias"; // Te devuelve a la página de transferencia
+        }
+
+        Usuario receptor = receptorOpt.get();
+
+        // 4. VALIDAR QUE NO SE ENVÍE A SÍ MISMO
+        if (emisor.getEmail().equals(emailDestino)) {
+            redirectAttributes.addFlashAttribute("error", "No puedes realizar una transferencia a tu propia cuenta.");
+            return "redirect:/transferencias";
+        }
+
+        // 5. VALIDAR SALDO
+        if (emisor.getSaldo() < cantidad) {
+            redirectAttributes.addFlashAttribute("error", "Saldo insuficiente para realizar la operación.");
+            return "redirect:/transferencias";
+        }
+
+        // --- LÓGICA DE ACTUALIZACIÓN (Tu código original) ---
         emisor.setSaldo(emisor.getSaldo() - cantidad);
         receptor.setSaldo(receptor.getSaldo() + cantidad);
 
         usuarioRepository.save(emisor);
         usuarioRepository.save(receptor);
 
-        // REGISTRO PARA EL EMISOR (Aparecerá en "Gastos del mes" porque es negativo)
+        // Registro Emisor
         Movimiento movEmisor = new Movimiento();
-        movEmisor.setImporte(-cantidad); // Negativo para que reste y sume en gastos
+        movEmisor.setImporte(-cantidad);
         movEmisor.setEstablecimiento("Transferencia enviada a " + receptor.getNombre());
         movEmisor.setFecha(LocalDateTime.now());
         movEmisor.setUsuario(emisor);
         movimientoRepository.save(movEmisor);
 
-        // REGISTRO PARA EL RECEPTOR (Aparecerá como ingreso)
+        // Registro Receptor
         Movimiento movReceptor = new Movimiento();
         movReceptor.setImporte(cantidad);
         movReceptor.setEstablecimiento("Transferencia recibida de " + emisor.getNombre());

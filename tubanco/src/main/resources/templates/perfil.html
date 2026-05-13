@@ -2,144 +2,298 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Mi Perfil - Seguridad</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajustes de Perfil | TuBanco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #4CAF50;
+            --primary-dark: #388E3C;
+            --navy: #1e293b;
+            --slate: #64748b;
+            --bg: #f8fafc;
+            --error: #ef4444;
+            --success: #22c55e;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f1f5f9;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(at 0% 0%, rgba(76, 175, 80, 0.05) 0px, transparent 50%), 
+                              radial-gradient(at 100% 0%, rgba(30, 41, 59, 0.05) 0px, transparent 50%);
             margin: 0;
-            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
-            max-width: 600px;
-            margin: auto;
+            width: 100%;
+            max-width: 800px;
             background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .section {
-            border-bottom: 1px solid #edf2f7;
-            padding: 20px 0;
+        /* HEADER DEL PERFIL */
+        .profile-header {
+            background: var(--navy);
+            padding: 40px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            position: relative;
         }
 
-        .section:last-child {
-            border: none;
+        .profile-header::after {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.1;
         }
 
+        .avatar-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 40px;
+            object-fit: cover;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .header-info h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header-info p {
+            margin: 5px 0 0 0;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* CUERPO DE LA PÁGINA */
+        .content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .section-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            padding: 25px;
+            border-radius: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: var(--navy);
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* MENSAJES */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-error { background: #fee2e2; color: var(--error); border: 1px solid #fecaca; }
+        .alert-exito { background: #dcfce7; color: var(--success); border: 1px solid #bbf7d0; }
+
+        /* FORMULARIOS */
         label {
             display: block;
-            color: #64748b;
             font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--slate);
             margin-bottom: 8px;
         }
 
-        input {
+        input[type="text"], input[type="number"], input[type="password"], input[type="file"] {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            padding: 14px;
+            border: 2px solid #f1f5f9;
+            border-radius: 14px;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.3s ease;
             box-sizing: border-box;
         }
 
-        .btn-save {
-            background: #1e293b;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.1);
+        }
+
+        .btn {
             cursor: pointer;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
             width: 100%;
-            font-weight: 600;
-            transition: background 0.3s;
         }
 
-        .btn-save:hover {
-            background: #334155;
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.2);
         }
 
-        .btn-foto {
-            background: #3b82f6;
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            color: var(--navy);
+            padding: 10px 20px;
+            margin-top: 15px;
         }
 
-        .btn-foto:hover {
-            background: #2563eb;
+        .btn-outline:hover {
+            background: #f8fafc;
+            border-color: var(--navy);
         }
 
-        .alert-error {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        /* ÁREA DE CONFIRMACIÓN CRÍTICA */
+        .critical-section {
+            background: #f8fafc;
+            border: 2px dashed #e2e8f0;
+            padding: 25px;
+            border-radius: 24px;
         }
 
-        .alert-exito {
-            background: #dcfce7;
-            color: #16a34a;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .badge-limit {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
         }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .back-link a {
+            color: var(--slate);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover { color: var(--navy); }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h2>Configuración de Perfil</h2>
+        <!-- HEADER CON ESTILO BANCARIO -->
+        <div class="profile-header">
+            <div class="avatar-container">
+                <img th:src="${usuario.fotoPerfil != null ? '/imagenes/' + usuario.fotoPerfil : 'https://ui-avatars.com/api/?name=User&background=4CAF50&color=fff'}" 
+                     class="avatar-img" alt="Foto de perfil">
+            </div>
+            <div class="header-info">
+                <h2 th:text="${#strings.toUpperCase(usuario.nombre)}">NOMBRE USUARIO</h2>
+                <p>Gestiona tu seguridad y preferencias de cuenta</p>
+            </div>
+        </div>
 
-        <!-- Mensajes de Feedback -->
-        <div th:if="${error}" class="alert-error" th:text="${error}"></div>
-        <div th:if="${exito}" class="alert-exito" th:text="${exito}"></div>
+        <div class="content">
+            <!-- MENSAJES DE FEEDBACK -->
+            <div th:if="${error}" class="alert alert-error">
+                <i>⚠️</i> <span th:text="${error}"></span>
+            </div>
+            <div th:if="${exito}" class="alert alert-exito">
+                <i>✅</i> <span th:text="${exito}"></span>
+            </div>
 
-        <!-- FORMULARIO 1: FOTO DE PERFIL (Independiente) -->
-        <div class="section">
-            <h3>Foto de Perfil</h3>
-            <img th:src="@{'/imagenes/' + ${usuario.fotoPerfil}}"
-                style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid #e2e8f0;">
+            <!-- SECCIÓN 1: FOTO -->
+            <div class="section-card">
+                <h3> Actualizar Imagen</h3>
+                <form th:action="@{/perfil/subir-foto}" method="post" enctype="multipart/form-data">
+                    <input type="file" name="archivo" accept="image/*" required>
+                    <button type="submit" class="btn btn-outline">Subir nueva foto</button>
+                </form>
+            </div>
 
-            <!-- Este formulario solo se encarga de la imagen -->
-            <form th:action="@{/perfil/subir-foto}" method="post" enctype="multipart/form-data">
-                <input type="file" name="archivo" accept="image/*" required>
-                <button type="submit" class="btn-save btn-foto" style="margin-top: 10px;">Cambiar Foto de
-                    Perfil</button>
+            <!-- FORMULARIO PRINCIPAL -->
+            <form th:action="@{/perfil/actualizar-seguridad}" method="post">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- SECCIÓN 2: LÍMITE -->
+                    <div class="section-card">
+                        <h3> Límite Mensual</h3>
+                        <label>Límite actual: <span class="badge-limit" th:text="${usuario.limiteMensual} + ' €'">1000€</span></label>
+                        <input type="number" name="nuevoLimite" step="0.01" th:placeholder="${usuario.limiteMensual}">
+                    </div>
+
+                    <!-- SECCIÓN 3: PASSWORD -->
+                    <div class="section-card">
+                        <h3> Seguridad</h3>
+                        <label>Nueva contraseña</label>
+                        <input type="password" name="nuevaPassword" placeholder="Dejar en blanco para no cambiar">
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 4: CONFIRMACIÓN -->
+                <div class="critical-section" style="margin-top: 30px;">
+                    <h3 style="color: var(--error);"> Verificación Requerida</h3>
+                    <p style="font-size: 0.85rem; color: var(--slate); margin-bottom: 20px;">
+                        Para guardar los cambios en tus límites o contraseña, introduce tu <b>contraseña actual</b>.
+                    </p>
+                    <input type="password" name="passwordActual" required placeholder="Contraseña actual" style="margin-bottom: 20px;">
+                    <button type="submit" class="btn btn-primary">Guardar Ajustes de Seguridad</button>
+                </div>
             </form>
         </div>
 
-        <!-- FORMULARIO 2: SEGURIDAD Y LÍMITES (Independiente) -->
-        <form th:action="@{/perfil/actualizar-seguridad}" method="post">
-
-            <div class="section">
-                <h3>Límite Mensual</h3>
-                <p style="font-size: 0.9rem; color: #94a3b8;">Establece el máximo que quieres gastar este mes.</p>
-                <label>Límite actual: <span th:text="${usuario.limiteMensual} + ' €'">1000€</span></label>
-                <input type="number" name="nuevoLimite" step="0.01" th:placeholder="${usuario.limiteMensual}">
-            </div>
-
-            <div class="section">
-                <h3>Cambiar Contraseña</h3>
-                <label>Nueva contraseña (dejar en blanco si no deseas cambiarla)</label>
-                <input type="password" name="nuevaPassword">
-            </div>
-
-            <div class="section"
-                style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
-                <h3 style="margin-top: 0; color: #e11d48;">Confirmar Cambios</h3>
-                <p style="font-size: 0.85rem;">Introduce tu <b>contraseña actual</b> para aplicar los cambios de
-                    seguridad:</p>
-                <input type="password" name="passwordActual" required style="border: 2px solid #cbd5e1;">
-                <button type="submit" class="btn-save">Guardar Cambios de Seguridad</button>
-            </div>
-        </form>
-
-        <a href="/tubanco"
-            style="display: block; text-align: center; margin-top: 20px; color: #64748b; text-decoration: none;">
-            ← Volver al Dashboard
-        </a>
+        <div class="back-link">
+            <a href="/tubanco">← Volver al Panel Principal</a>
+        </div>
     </div>
 </body>
 
