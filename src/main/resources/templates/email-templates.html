@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .header {
+            background-color: #004a99;
+            padding: 25px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        .content {
+            padding: 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .content p {
+            margin: 0 0 15px 0;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .data-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .amount {
+            font-weight: bold;
+            color: #004a99;
+            font-size: 20px;
+        }
+
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #888888;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .logo-placeholder {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-placeholder">
+                <!-- SUSTITUYE ESTA URL POR TU LOGO REAL -->
+                <img src="/images/tubanco_logo.png" alt="TuBanco Logo" style="width: 150px;">
+            </div>
+            <h2>TuBanco - Notificación Oficial</h2>
+        </div>
+
+        <div class="content">
+            <p>Estimado/a <strong>[NOMBRE_CLIENTE]</strong>,</p>
+            <p>Le notificamos que se ha realizado con éxito una nueva operación en su cuenta personal:</p>
+
+            <table class="data-table">
+                <tr>
+                    <td class="label">Operación:</td>
+                    <td>[TIPO_MOVIMIENTO]</td>
+                </tr>
+                <tr>
+                    <td class="label">Importe:</td>
+                    <td class="amount">[CANTIDAD] €</td>
+                </tr>
+                <tr>
+                    <td class="label">Fecha:</td>
+                    <td>2026-05-21</td>
+                </tr>
+            </table>
+
+            <p>Si usted no ha autorizado esta transacción, por favor, póngase en contacto con nuestro servicio de
+                seguridad inmediatamente.</p>
+            <p>Atentamente,<br><strong>El equipo de TuBanco</strong></p>
+        </div>
+
+        <div class="footer">
+            <p>Este es un mensaje generado automáticamente. Por favor, no responda a este correo.</p>
+            <p>&copy; 2026 TuBanco España. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</body>
+
+</html>
