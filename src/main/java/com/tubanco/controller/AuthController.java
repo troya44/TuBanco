@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication; // Para el CVV
+import com.tubanco.service.EmailService; // IMPORTANTE: Importa tu servicio
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,6 +28,9 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
@@ -43,6 +47,13 @@ public class AuthController {
                     passwordEncoder.encode(request.getPassword()));
 
             usuarioRepository.save(usuario);
+
+            try {
+                emailService.enviarCorreoBienvenida(usuario.getEmail(), usuario.getNombre());
+            } catch (Exception e) {
+                // No detenemos el registro si falla el correo, solo lo logueamos
+                System.err.println("No se pudo enviar el correo de bienvenida: " + e.getMessage());
+            }
 
             // --- SOLUCIÓN PARA EL ERROR ---
             java.util.Map<String, String> response = new java.util.HashMap<>();

@@ -49,4 +49,27 @@ public class EmailService {
             System.err.println("Error al enviar correo profesional: " + e.getMessage());
         }
     }
+
+    @Async
+    public void enviarCorreoBienvenida(String destinatario, String nombre) {
+        try {
+            Resource resource = resourceLoader.getResource("classpath:templates/email-welcome.html");
+            String htmlContent = FileCopyUtils
+                    .copyToString(new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8));
+
+            htmlContent = htmlContent.replace("[NOMBRE_CLIENTE]", nombre);
+
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom("soporte@tubanco.com");
+            helper.setTo(destinatario);
+            helper.setSubject("¡Bienvenido a TuBanco!");
+            helper.setText(htmlContent, true);
+
+            mailSender.send(message);
+        } catch (Exception e) {
+            System.err.println("Error enviando correo de bienvenida: " + e.getMessage());
+        }
+    }
 }
