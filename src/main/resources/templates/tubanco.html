@@ -13,7 +13,6 @@
             --bg-light: #f1f5f9;
             --sidebar-dark: #0f172a;
             --text-main: #1e293b;
-            --accent-blue: #2563eb;
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 10px 25px -5px rgba(76, 175, 80, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
         }
@@ -23,7 +22,98 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--sidebar-dark) 0%, #020617 100%);
+            color: white;
+            padding: 35px 25px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            border-right: 4px solid var(--primary-green);
+        }
+
+        .sidebar h2 {
+            color: var(--primary-green);
+            margin-bottom: 50px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #94a3b8;
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px 60px;
+            overflow-y: auto;
+        }
+
+        .chat-widget {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 9999;
+        }
+
+        .chat-button {
+            width: 65px;
+            height: 65px;
+            background: var(--primary-green);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .chat-window {
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         body {
@@ -324,7 +414,8 @@
 
     <div class="sidebar">
         <h2>TuBanco</h2>
-        <img th:src="@{/images/tubanco_logo.png}" alt="Logo" style="width: 50%; margin-bottom: 40px; opacity: 0.8; margin-left: auto; margin-right: auto; display: block;">
+        <img th:src="@{/images/tubanco_logo.png}" alt="Logo"
+            style="width: 50%; margin-bottom: 40px; opacity: 0.8; margin-left: auto; margin-right: auto; display: block;">
         <a href="#" class="active">Resumen</a>
         <a href="/transferencias">Transferencias</a>
         <a href="/tarjetas">Mis Tarjetas</a>
@@ -498,26 +589,25 @@
         <div class="chat-window" id="chatWindow">
             <div class="chat-header"
                 style="background: var(--sidebar-dark); color: white; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 10px; height: 10px; background: var(--primary-green); border-radius: 50%;"></div>
-                    <strong style="font-size: 0.95rem;">Soporte TuBanco</strong>
-                </div>
+                <strong style="font-size: 0.95rem;">Soporte TuBanco</strong>
                 <button onclick="toggleChat()"
-                    style="background:none; border:none; color:white; cursor:pointer; font-size: 1.5rem; font-weight: 300;">&times;</button>
+                    style="background:none; border:none; color:white; cursor:pointer; font-size: 1.5rem;">&times;</button>
             </div>
-            <div class="chat-messages" id="chatContent"
-                style="flex:1; padding:20px; overflow-y:auto; background:#f8fafc; display: flex; flex-direction: column; gap: 12px;">
+
+            <div class="chat-messages" id="chatContent">
                 <div
-                    style="background: white; padding: 12px 16px; border-radius: 16px; border: 1px solid #e2e8f0; font-size:0.9rem; max-width:85%; color: var(--text-main); box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-                    ¡Hola! Soy tu asistente de TuBanco. ¿Cómo puedo ayudarte hoy?</div>
+                    style="background: white; padding: 12px 16px; border-radius: 16px; border: 1px solid #e2e8f0; font-size:0.9rem; max-width:85%;">
+                    ¡Hola! Soy tu asistente. ¿Cómo puedo ayudarte?
+                </div>
             </div>
+
             <div class="chat-footer"
                 style="padding:15px 20px; border-top:1px solid #e2e8f0; display:flex; gap:12px; background: white;">
-                <input type="text" id="userInput"
+                <input type="text" id="userInput" onkeypress="if(event.key === 'Enter') sendMessage()"
                     style="flex:1; border:1px solid #e2e8f0; border-radius:12px; padding:12px; outline: none; font-size: 0.9rem;"
                     placeholder="Escribe tu mensaje...">
                 <button onclick="sendMessage()"
-                    style="background: var(--primary-green); color:white; border:none; width: 45px; height: 45px; border-radius: 12px; cursor:pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s;">
+                    style="background: var(--primary-green); color:white; border:none; width: 45px; height: 45px; border-radius: 12px; cursor:pointer; display: flex; align-items: center; justify-content: center;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
                         stroke-linecap="round" stroke-linejoin="round">
                         <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -533,13 +623,37 @@
             </svg>
         </div>
     </div>
-
     <script>
         let ibanRevelado = false;
 
         function toggleChat() {
             const chat = document.getElementById('chatWindow');
             chat.style.display = (chat.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const chatContent = document.getElementById('chatContent');
+            const message = input.value.trim();
+
+            if (message === "") return;
+
+            // 1. Mostrar mensaje del usuario
+            const userDiv = document.createElement('div');
+            userDiv.style.cssText = "background: var(--primary-green); color: white; padding: 12px 16px; border-radius: 16px; align-self: flex-end; max-width: 85%; font-size: 0.9rem;";
+            userDiv.innerText = message;
+            chatContent.appendChild(userDiv);
+
+            input.value = "";
+            chatContent.scrollTop = chatContent.scrollHeight;
+
+            // 3. (Opcional) Simular respuesta del bot
+            setTimeout(() => {
+                const botDiv = document.createElement('div');
+                botDiv.style.cssText = "background: white; padding: 12px 16px; border-radius: 16px; border: 1px solid #e2e8f0; font-size: 0.9rem; max-width: 85%;";
+                botDiv.innerText = "Mensaje recibido correctamente. Soporte se pondrá en contacto una vez analizado el problema."; chatContent.appendChild(botDiv);
+                chatContent.scrollTop = chatContent.scrollHeight;
+            }, 600);
         }
 
         function formatIban(iban) {
